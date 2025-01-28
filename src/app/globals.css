@@ -5,17 +5,98 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-size: 1vmin;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: white;
+  background: black;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+h1,
+h2 {
+  text-align: center;
+  padding: 1rem;
+}
+
+table.filters {
+  table-layout: fixed;
+  width: 80%;
+  margin: 0 auto;
+}
+
+table.filters td {
+  text-align: center;
+  background-color: navy;
+  padding: 1rem;
+  box-shadow: inset 0 0 0.5rem black;
+}
+
+div.flex {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+div.flex.column {
+  flex-direction: column;
+}
+
+table.filters td > div.flex input,
+table.filters td > div.flex select {
+  width: 45%;
+}
+
+table.filters td > div.flex.column > input,
+table.filters td > div.flex.column > select {
+  width: 100%;
+}
+
+input,
+select {
+  color: black;
+  text-align: center;
+}
+
+div.filters {
+  margin: 0 auto;
+  width: fit-content;
+}
+
+table.adp {
+  table-layout: fixed;
+  max-width: 100vw;
+  margin: 0 auto;
+}
+
+table.adp td {
+  text-align: center;
+  background-color: #2e2e2e;
+  color: #00ffff;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  box-shadow: inset 0 0 0.5rem black;
+}
+
+span.undrafted-percentage {
+  position: relative;
+  background-color: red;
+  padding: 0.5rem;
+}
+
+span.undrafted-percentage > select.transparent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+button {
+  background-color: goldenrod;
+  color: black;
+  padding: 0.5rem 1rem;
+  box-shadow: inset 0 0 0.5rem black;
+  font-weight: 900;
 }
