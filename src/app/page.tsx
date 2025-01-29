@@ -32,12 +32,12 @@ export default function Home() {
     any: boolean;
     min: number;
     max: number;
-  }>({ any: true, min: 15, max: 50 });
+  }>({ any: false, min: 15, max: 50 });
   const [numTeams, setNumTeams] = useState<{
     any: boolean;
     min: number;
     max: number;
-  }>({ any: true, min: 10, max: 14 });
+  }>({ any: false, min: 10, max: 14 });
   const [draftTypes, setDraftTypes] = useState(["snake", "linear"]);
   const [playerType, setPlayerType] = useState<number | null>(null);
 
@@ -102,18 +102,18 @@ export default function Home() {
     any: boolean;
     min: number;
     max: number;
-  }>({ any: true, min: 0, max: 2 });
+  }>({ any: true, min: 0, max: 10 });
 
   const [pass_td, setPass_td] = useState<{
     any: boolean;
     min: number;
     max: number;
-  }>({ any: true, min: 0, max: 2 });
+  }>({ any: true, min: 4, max: 6 });
   const [bonus_rec_te, setBonus_rec_te] = useState<{
     any: boolean;
     min: number;
     max: number;
-  }>({ any: true, min: 0, max: 2 });
+  }>({ any: true, min: 0, max: 1 });
 
   const [result, setResult] = useState<{
     draft_count: number;
@@ -273,6 +273,7 @@ export default function Home() {
                       min: Number(e.target.value),
                     })
                   }
+                  disabled={numRounds.any}
                 >
                   {Array.from({ length: 50 }, (_, i) => (
                     <option key={i} value={i + 1}>
@@ -293,6 +294,7 @@ export default function Home() {
                       max: Number(e.target.value),
                     })
                   }
+                  disabled={numRounds.any}
                 >
                   {Array.from({ length: 50 }, (_, i) => (
                     <option key={i} value={i + 1}>
@@ -328,6 +330,7 @@ export default function Home() {
                       min: Number(e.target.value),
                     })
                   }
+                  disabled={numTeams.any}
                 >
                   {Array.from({ length: 32 }, (_, i) => (
                     <option key={i} value={i + 1}>
@@ -348,6 +351,7 @@ export default function Home() {
                       max: Number(e.target.value),
                     })
                   }
+                  disabled={numTeams.any}
                 >
                   {Array.from({ length: 32 }, (_, i) => (
                     <option key={i} value={i + 1}>
