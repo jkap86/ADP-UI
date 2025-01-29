@@ -1182,24 +1182,40 @@ export default function Home() {
         <thead>
           <tr>
             <th>Player</th>
-            <th>ADP</th>
+            <th>
+              {result.filters["draftTypes[]"] === "auction"
+                ? "budget %"
+                : "ADP"}
+            </th>
             <th>Undrafted %</th>
           </tr>
         </thead>
         <tbody>
           {(result.adp || [])
             .filter((pick) => pick.undrafted_percentage < undrafted_percentage)
-            .sort((a, b) => a.adp - b.adp)
+            .sort((a, b) => {
+              if (result.filters["draftTypes[]"] === "auction") {
+                return b.adp - a.adp;
+              } else {
+                return a.adp - b.adp;
+              }
+            })
             .map((pick) => (
               <tr key={pick.player_id}>
                 <td>
                   {allplayers[pick.player_id]?.full_name || pick.player_id}
                 </td>
                 <td>
-                  {Math.ceil(Math.round(pick.adp) / 12)}.
-                  {(Math.round(pick.adp) % 12 || 12).toLocaleString("en-US", {
-                    minimumIntegerDigits: 2,
-                  })}
+                  {result.filters["draftTypes[]"] === "auction"
+                    ? Math.round(pick.adp) + "%"
+                    : Math.ceil(Math.round(pick.adp) / 12) +
+                      "." +
+                      (Math.round(pick.adp) % 12 || 12).toLocaleString(
+                        "en-US",
+                        {
+                          minimumIntegerDigits: 2,
+                        }
+                      )}
                 </td>
                 <td>{pick.undrafted_percentage}</td>
               </tr>
