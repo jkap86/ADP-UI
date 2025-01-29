@@ -182,7 +182,7 @@ export async function GET(req: Request) {
             ${
               minIDP_TOTAL && maxIDP_TOTAL
                 ? `AND (
-                        COALESCE(d.settings->>'slots_dl', '0')::INT + COALESCE(d.settings->>'slots_lb', '0')::INT + COALESCE(d.settings->>'slots_db', '0')::INT + COALESCE(d.settings->>'slots_idp_flex', '0')::INT , '0')::INT
+                        COALESCE(d.settings->>'slots_dl', '0')::INT + COALESCE(d.settings->>'slots_lb', '0')::INT + COALESCE(d.settings->>'slots_db', '0')::INT + COALESCE(d.settings->>'slots_idp_flex', '0')::INT 
                     ) >= ${minIDP_TOTAL} AND (
                         COALESCE(d.settings->>'slots_dl', '0')::INT + COALESCE(d.settings->>'slots_lb', '0')::INT + COALESCE(d.settings->>'slots_db', '0')::INT + COALESCE(d.settings->>'slots_idp_flex', '0')::INT
                     ) <= ${maxIDP_TOTAL}`
