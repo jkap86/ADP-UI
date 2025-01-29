@@ -44,6 +44,97 @@ export async function GET(req: Request) {
   const bonus_rec_te__min = searchParams.get("bonus_rec_te__min");
   const bonus_rec_te__max = searchParams.get("bonus_rec_te__max");
 
+  const slotQueries = [
+    {
+      min: minQB,
+      max: maxQB,
+      keys: ["slots_qb"],
+    },
+    {
+      min: minRB,
+      max: maxRB,
+      keys: ["slots_rb"],
+    },
+    {
+      min: minWR,
+      max: maxWR,
+      keys: ["slots_wr"],
+    },
+    {
+      min: minTE,
+      max: maxTE,
+      keys: ["slots_te"],
+    },
+    {
+      min: minFLEX,
+      max: maxFLEX,
+      keys: ["slots_flex"],
+    },
+    {
+      min: minSUPER_FLEX,
+      max: maxSUPER_FLEX,
+      keys: ["slots_super_flex"],
+    },
+    {
+      min: minK,
+      max: maxK,
+      keys: ["slots_k"],
+    },
+    {
+      min: minWRRB_FLEX,
+      max: maxWRRB_FLEX,
+      keys: ["slots_wrrb_flex"],
+    },
+    {
+      min: minREC_FLEX,
+      max: maxREC_FLEX,
+      keys: ["slots_rec_flex"],
+    },
+    {
+      min: minDEF,
+      max: maxDEF,
+      keys: ["slots_def"],
+    },
+    {
+      min: minIDP_TOTAL,
+      max: maxIDP_TOTAL,
+      keys: ["slots_dl", "slots_lb", "slots_db", "slots_idp_flex"],
+    },
+  ]
+    .map(({ min, max, keys }) => {
+      if (min && max) {
+        const sum = keys
+          .map((key) => `COALESCE(d.settings->>'${key}', '0')::INT`)
+          .join(" + ");
+        return `AND (${sum}) >= ${min} AND (${sum}) <= ${max}`;
+      }
+      return "";
+    })
+    .join(" ");
+
+  const scoringSettingsQueries = [
+    {
+      min: pass_td__min,
+      max: pass_td__max,
+      key: "pass_td",
+    },
+    {
+      min: bonus_rec_te__min,
+      max: bonus_rec_te__max,
+      key: "bonus_rec_te",
+    },
+  ]
+    .map(({ min, max, key }) => {
+      if (min && max) {
+        return `
+          AND (COALESCE(l.scoring_settings->>'${key}', '0')::FLOAT) >= ${min} 
+          AND (COALESCE(l.scoring_settings->>'${key}', '0')::FLOAT) <= ${max}
+        `;
+      }
+      return "";
+    })
+    .join(" ");
+
   const query = `
     WITH recent_drafts AS (
         SELECT d.* 
@@ -80,132 +171,10 @@ export async function GET(req: Request) {
                     ) = ${playerType}`
                 : ""
             }
-            ${
-              minQB && maxQB
-                ? `AND (
-                        COALESCE(d.settings->>'slots_qb', '0')::INT
-                    ) >= ${minQB} AND (
-                        COALESCE(d.settings->>'slots_qb', '0')::INT
-                    ) <= ${maxQB}`
-                : ""
-            }
-            ${
-              minRB && maxRB
-                ? `AND (
-                        COALESCE(d.settings->>'slots_rb', '0')::INT
-                    ) >= ${minRB} AND (
-                        COALESCE(d.settings->>'slots_rb', '0')::INT
-                    ) <= ${maxRB}`
-                : ""
-            }
-            ${
-              minWR && maxWR
-                ? `AND (
-                        COALESCE(d.settings->>'slots_wr', '0')::INT
-                    ) >= ${minWR} AND (
-                        COALESCE(d.settings->>'slots_wr', '0')::INT
-                    ) <= ${maxWR}`
-                : ""
-            }
-            ${
-              minTE && maxTE
-                ? `AND (
-                        COALESCE(d.settings->>'slots_te', '0')::INT
-                    ) >= ${minTE} AND (
-                        COALESCE(d.settings->>'slots_te', '0')::INT
-                    ) <= ${maxTE}`
-                : ""
-            }
-            ${
-              minFLEX && maxFLEX
-                ? `AND (
-                        COALESCE(d.settings->>'slots_flex', '0')::INT
-                    ) >= ${minFLEX} AND (
-                        COALESCE(d.settings->>'slots_flex', '0')::INT
-                    ) <= ${maxFLEX}`
-                : ""
-            }
-            ${
-              minSUPER_FLEX && maxSUPER_FLEX
-                ? `AND (
-                        COALESCE(d.settings->>'slots_super_flex', '0')::INT
-                    ) >= ${minSUPER_FLEX} AND (
-                        COALESCE(d.settings->>'slots_super_flex', '0')::INT
-                    ) <= ${maxSUPER_FLEX}`
-                : ""
-            }
-            ${
-              minQB_SF && maxQB_SF
-                ? `AND (
-                        COALESCE(d.settings->>'slots_qb', '0')::INT + COALESCE(d.settings->>'slots_super_flex', '0')::INT
-                    ) >= ${minQB_SF} AND (
-                        COALESCE(d.settings->>'slots_qb', '0')::INT + COALESCE(d.settings->>'slots_super_flex', '0')::INT
-                    ) <= ${maxQB_SF}`
-                : ""
-            }
-            ${
-              minK && maxK
-                ? `AND (
-                        COALESCE(d.settings->>'slots_k', '0')::INT
-                    ) >= ${minK} AND (
-                        COALESCE(d.settings->>'slots_k', '0')::INT
-                    ) <= ${maxK}`
-                : ""
-            }
-            ${
-              minWRRB_FLEX && maxWRRB_FLEX
-                ? `AND (
-                        COALESCE(d.settings->>'slots_wrrb_flex', '0')::INT
-                    ) >= ${minWRRB_FLEX} AND (
-                        COALESCE(d.settings->>'slots_wrrb_flex', '0')::INT
-                    ) <= ${maxWRRB_FLEX}`
-                : ""
-            }
-            ${
-              minREC_FLEX && maxREC_FLEX
-                ? `AND (
-                        COALESCE(d.settings->>'slots_rec_flex', '0')::INT
-                    ) >= ${minREC_FLEX} AND (
-                        COALESCE(d.settings->>'slots_rec_flex', '0')::INT
-                    ) <= ${maxREC_FLEX}`
-                : ""
-            }
-            ${
-              minDEF && maxDEF
-                ? `AND (
-                        COALESCE(d.settings->>'slots_def', '0')::INT
-                    ) >= ${minDEF} AND (
-                        COALESCE(d.settings->>'slots_def', '0')::INT
-                    ) <= ${maxDEF}`
-                : ""
-            }
-            ${
-              minIDP_TOTAL && maxIDP_TOTAL
-                ? `AND (
-                        COALESCE(d.settings->>'slots_dl', '0')::INT + COALESCE(d.settings->>'slots_lb', '0')::INT + COALESCE(d.settings->>'slots_db', '0')::INT + COALESCE(d.settings->>'slots_idp_flex', '0')::INT 
-                    ) >= ${minIDP_TOTAL} AND (
-                        COALESCE(d.settings->>'slots_dl', '0')::INT + COALESCE(d.settings->>'slots_lb', '0')::INT + COALESCE(d.settings->>'slots_db', '0')::INT + COALESCE(d.settings->>'slots_idp_flex', '0')::INT
-                    ) <= ${maxIDP_TOTAL}`
-                : ""
-            }
-            ${
-              pass_td__min && pass_td__max
-                ? `AND (
-                        COALESCE(l.scoring_settings->>'pass_td', '0')::FLOAT
-                    ) >= ${pass_td__min} AND (
-                        COALESCE(l.scoring_settings->>'pass_td', '0')::FLOAT
-                    ) <= ${pass_td__max}`
-                : ""
-            }
-            ${
-              bonus_rec_te__min && bonus_rec_te__max
-                ? `AND (
-                        COALESCE(l.scoring_settings->>'bonus_rec_te', '0')::FLOAT
-                    ) >= ${bonus_rec_te__min} AND (
-                        COALESCE(l.scoring_settings->>'bonus_rec_te', '0')::FLOAT
-                    ) <= ${bonus_rec_te__max}`
-                : ""
-            }
+
+            ${slotQueries}
+            
+            ${scoringSettingsQueries}
     ),
     draft_count AS (
         SELECT COUNT(*) AS draft_count

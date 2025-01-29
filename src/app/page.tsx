@@ -17,7 +17,8 @@ export default function Home() {
   const [allplayers, setAllplayers] = useState<{
     [key: string]: Allplayer;
   }>({});
-  const [startKey, setStartKey] = useState("start_time");
+  const [isVisible, setIsVisible] = useState("Date Range");
+  const [startKey, setStartKey] = useState("last_picked");
   const [startDate, setStartDate] = useState(
     new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30)
       .toISOString()
@@ -45,75 +46,75 @@ export default function Home() {
 
   const [numQB, setNumQB] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "1", max: "1" });
   const [numRB, setNumRB] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "1", max: "2" });
   const [numWR, setNumWR] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "2", max: "4" });
   const [numTE, setNumTE] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "2", max: "4" });
   const [numFLEX, setNumFLEX] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "0", max: "2" });
   const [numSUPER_FLEX, setNumSUPER_FLEX] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "0", max: "2" });
   const [numQB_SF, setNumQB_SF] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "0", max: "2" });
   const [numK, setNumK] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "0", max: "2" });
   const [numWRRB_FLEX, setNumWRRB_FLEX] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "0", max: "2" });
   const [numREC_FLEX, setNumREC_FLEX] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "0", max: "2" });
   const [numDEF, setNumDEF] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 2 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "0", max: "2" });
   const [numIDP_TOTAL, setNumIDP_TOTAL] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 10 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "0", max: "10" });
 
   const [pass_td, setPass_td] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 4, max: 6 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "4", max: "6" });
   const [bonus_rec_te, setBonus_rec_te] = useState<{
     any: boolean;
-    min: number;
-    max: number;
-  }>({ any: true, min: 0, max: 1 });
+    min: string;
+    max: string;
+  }>({ any: true, min: "0", max: "1" });
 
   const [result, setResult] = useState<{
     draft_count: number;
@@ -201,947 +202,615 @@ export default function Home() {
       <table className="filters">
         <thead>
           <tr>
-            <th colSpan={4}>Date Range</th>
+            <th
+              colSpan={4}
+              onClick={() =>
+                isVisible === "Date Range"
+                  ? setIsVisible("")
+                  : setIsVisible("Date Range")
+              }
+            >
+              Date Range
+            </th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td colSpan={2}>
-              <div className="flex column">
-                <select
-                  value={startKey}
-                  onChange={(e) => setStartKey(e.target.value)}
-                >
-                  <option value="start_time">Draft started after</option>
-                  <option value="last_picked">Draft ended after</option>
-                </select>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
-              </div>
-            </td>
-
-            <td colSpan={2}>
-              <div className="flex column">
-                <select
-                  value={endKey}
-                  onChange={(e) => setEndKey(e.target.value)}
-                >
-                  <option value="start_time">Draft started before</option>
-                  <option value="last_picked">Draft ended before</option>
-                </select>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-
-        <thead>
-          <tr>
-            <th colSpan={4}>Filters</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Rounds</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numRounds.any}
-                  onChange={(e) =>
-                    setNumRounds({ ...numRounds, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min Rounds</label>
-                <select
-                  value={numRounds.min}
-                  onChange={(e) =>
-                    setNumRounds({
-                      ...numRounds,
-                      min: Number(e.target.value),
-                    })
-                  }
-                  disabled={numRounds.any}
-                >
-                  {Array.from({ length: 50 }, (_, i) => (
-                    <option key={i} value={i + 1}>
-                      {i + 1}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max Rounds</label>
-                <select
-                  value={numRounds.max}
-                  onChange={(e) =>
-                    setNumRounds({
-                      ...numRounds,
-                      max: Number(e.target.value),
-                    })
-                  }
-                  disabled={numRounds.any}
-                >
-                  {Array.from({ length: 50 }, (_, i) => (
-                    <option key={i} value={i + 1}>
-                      {i + 1}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Teams</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numTeams.any}
-                  onChange={(e) =>
-                    setNumTeams({ ...numTeams, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min Teams</label>
-                <select
-                  value={numTeams.min}
-                  onChange={(e) =>
-                    setNumTeams({
-                      ...numTeams,
-                      min: Number(e.target.value),
-                    })
-                  }
-                  disabled={numTeams.any}
-                >
-                  {Array.from({ length: 32 }, (_, i) => (
-                    <option key={i} value={i + 1}>
-                      {i + 1}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max Teams</label>
-                <select
-                  value={numTeams.max}
-                  onChange={(e) =>
-                    setNumTeams({
-                      ...numTeams,
-                      max: Number(e.target.value),
-                    })
-                  }
-                  disabled={numTeams.any}
-                >
-                  {Array.from({ length: 32 }, (_, i) => (
-                    <option key={i} value={i + 1}>
-                      {i + 1}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Draft Type</td>
-            <td>
-              <div className="flex">
-                <div>
-                  <label>Snake</label>
+        {isVisible === "Date Range" && (
+          <tbody>
+            <tr>
+              <td colSpan={2}>
+                <div className="flex column">
+                  <select
+                    value={startKey}
+                    onChange={(e) => setStartKey(e.target.value)}
+                  >
+                    <option value="start_time">Draft started after</option>
+                    <option value="last_picked">Draft ended after</option>
+                  </select>
+                </div>
+              </td>
+              <td colSpan={2}>
+                <div className="flex column">
                   <input
-                    type="checkbox"
-                    checked={draftTypes.includes("snake")}
-                    onChange={(e) =>
-                      setDraftTypes(
-                        e.target.checked
-                          ? [
-                              ...draftTypes.filter((t) => t !== "auction"),
-                              "snake",
-                            ]
-                          : draftTypes.filter((t) => t !== "snake")
-                      )
-                    }
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
                   />
                 </div>
-              </div>
-            </td>
-            <td>
-              <div className="flex">
-                <div>
-                  <label>Linear</label>
+              </td>
+            </tr>
+            <tr>
+              <td colSpan={2}>
+                <div className="flex column">
+                  <select
+                    value={endKey}
+                    onChange={(e) => setEndKey(e.target.value)}
+                  >
+                    <option value="start_time">Draft started before</option>
+                    <option value="last_picked">Draft ended before</option>
+                  </select>
+                </div>
+              </td>
+              <td colSpan={2}>
+                <div className="flex column">
                   <input
-                    type="checkbox"
-                    checked={draftTypes.includes("linear")}
-                    onChange={(e) =>
-                      setDraftTypes(
-                        e.target.checked
-                          ? [
-                              ...draftTypes.filter((t) => t !== "auction"),
-                              "linear",
-                            ]
-                          : draftTypes.filter((t) => t !== "linear")
-                      )
-                    }
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
                   />
                 </div>
-              </div>
-            </td>
-            <td>
-              <div className="flex">
-                <div>
-                  <label>Auction</label>
-                  <input
-                    type="checkbox"
-                    checked={draftTypes.includes("auction")}
-                    onChange={(e) =>
-                      setDraftTypes(
-                        e.target.checked
-                          ? ["auction"]
-                          : draftTypes.filter((t) => t !== "auction")
-                      )
-                    }
-                  />
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Player Type</td>
-            <td>
-              <div className="flex column">
-                <label>Rookies Only</label>
-                <input
-                  type="checkbox"
-                  checked={playerType === 1}
-                  onChange={(e) => setPlayerType(e.target.checked ? 1 : null)}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Vets Only</label>
-                <input
-                  type="checkbox"
-                  checked={playerType === 2}
-                  onChange={(e) => setPlayerType(e.target.checked ? 2 : null)}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Vets & Rookies</label>
-                <input
-                  type="checkbox"
-                  checked={playerType === 0}
-                  onChange={(e) => setPlayerType(e.target.checked ? 0 : null)}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>League Type</td>
-            <td>
-              <div className="flex">
-                <div>
-                  <label>Dynasty</label>
-                  <input
-                    type="checkbox"
-                    checked={leagueTypes.includes(2)}
-                    onChange={(e) =>
-                      setLeagueTypes(
-                        e.target.checked
-                          ? [...leagueTypes, 2]
-                          : leagueTypes.filter((t) => t !== 2)
-                      )
-                    }
-                  />
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className="flex">
-                <div>
-                  <label>Keeper</label>
-                  <input
-                    type="checkbox"
-                    checked={leagueTypes.includes(1)}
-                    onChange={(e) =>
-                      setLeagueTypes(
-                        e.target.checked
-                          ? [...leagueTypes, 1]
-                          : leagueTypes.filter((t) => t !== 1)
-                      )
-                    }
-                  />
-                </div>
-              </div>
-            </td>
-            <td>
-              <div className="flex">
-                <div>
-                  <label>Redraft</label>
-                  <input
-                    type="checkbox"
-                    checked={leagueTypes.includes(0)}
-                    onChange={(e) =>
-                      setLeagueTypes(
-                        e.target.checked
-                          ? [...leagueTypes, 0]
-                          : leagueTypes.filter((t) => t !== 0)
-                      )
-                    }
-                  />
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
+              </td>
+            </tr>
+          </tbody>
+        )}
 
         <thead>
           <tr>
-            <th colSpan={4}>Player Slots</th>
+            <th
+              colSpan={4}
+              onClick={() =>
+                isVisible === "Draft Settings"
+                  ? setIsVisible("")
+                  : setIsVisible("Draft Settings")
+              }
+            >
+              Draft Settings
+            </th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td># QB Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numQB.any}
-                  onChange={(e) =>
-                    setNumQB({ ...numQB, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numQB.min}
-                  onChange={(e) =>
-                    setNumQB({ ...numQB, min: Number(e.target.value) })
-                  }
-                  disabled={numQB.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numQB.max}
-                  onChange={(e) =>
-                    setNumQB({ ...numQB, max: Number(e.target.value) })
-                  }
-                  disabled={numQB.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># RB Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numRB.any}
-                  onChange={(e) =>
-                    setNumRB({ ...numRB, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numRB.min}
-                  onChange={(e) =>
-                    setNumRB({ ...numRB, min: Number(e.target.value) })
-                  }
-                  disabled={numRB.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numRB.max}
-                  onChange={(e) =>
-                    setNumRB({ ...numRB, max: Number(e.target.value) })
-                  }
-                  disabled={numRB.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># WR Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numWR.any}
-                  onChange={(e) =>
-                    setNumWR({ ...numWR, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numWR.min}
-                  onChange={(e) =>
-                    setNumWR({ ...numWR, min: Number(e.target.value) })
-                  }
-                  disabled={numWR.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numWR.max}
-                  onChange={(e) =>
-                    setNumWR({ ...numWR, max: Number(e.target.value) })
-                  }
-                  disabled={numWR.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># TE Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numTE.any}
-                  onChange={(e) =>
-                    setNumTE({ ...numTE, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numTE.min}
-                  onChange={(e) =>
-                    setNumTE({ ...numTE, min: Number(e.target.value) })
-                  }
-                  disabled={numTE.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numTE.max}
-                  onChange={(e) =>
-                    setNumTE({ ...numTE, max: Number(e.target.value) })
-                  }
-                  disabled={numTE.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># FLEX Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numFLEX.any}
-                  onChange={(e) =>
-                    setNumFLEX({ ...numFLEX, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numFLEX.min}
-                  onChange={(e) =>
-                    setNumFLEX({ ...numFLEX, min: Number(e.target.value) })
-                  }
-                  disabled={numFLEX.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numFLEX.max}
-                  onChange={(e) =>
-                    setNumFLEX({ ...numFLEX, max: Number(e.target.value) })
-                  }
-                  disabled={numFLEX.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># SF Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numSUPER_FLEX.any}
-                  onChange={(e) =>
-                    setNumSUPER_FLEX({
-                      ...numSUPER_FLEX,
-                      any: e.target.checked,
-                    })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numSUPER_FLEX.min}
-                  onChange={(e) =>
-                    setNumSUPER_FLEX({
-                      ...numSUPER_FLEX,
-                      min: Number(e.target.value),
-                    })
-                  }
-                  disabled={numSUPER_FLEX.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numSUPER_FLEX.max}
-                  onChange={(e) =>
-                    setNumSUPER_FLEX({
-                      ...numSUPER_FLEX,
-                      max: Number(e.target.value),
-                    })
-                  }
-                  disabled={numSUPER_FLEX.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># QB + SF Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numQB_SF.any}
-                  onChange={(e) =>
-                    setNumQB_SF({ ...numQB_SF, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numQB_SF.min}
-                  onChange={(e) =>
-                    setNumQB_SF({ ...numQB_SF, min: Number(e.target.value) })
-                  }
-                  disabled={numQB_SF.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numQB_SF.max}
-                  onChange={(e) =>
-                    setNumQB_SF({ ...numQB_SF, max: Number(e.target.value) })
-                  }
-                  disabled={numQB_SF.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># K Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numK.any}
-                  onChange={(e) => setNumK({ ...numK, any: e.target.checked })}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numK.min}
-                  onChange={(e) =>
-                    setNumK({ ...numK, min: Number(e.target.value) })
-                  }
-                  disabled={numK.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numK.max}
-                  onChange={(e) =>
-                    setNumK({ ...numK, max: Number(e.target.value) })
-                  }
-                  disabled={numK.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># WR/RB Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numWRRB_FLEX.any}
-                  onChange={(e) =>
-                    setNumWRRB_FLEX({ ...numWRRB_FLEX, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numWRRB_FLEX.min}
-                  onChange={(e) =>
-                    setNumWRRB_FLEX({
-                      ...numWRRB_FLEX,
-                      min: Number(e.target.value),
-                    })
-                  }
-                  disabled={numWRRB_FLEX.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numWRRB_FLEX.max}
-                  onChange={(e) =>
-                    setNumWRRB_FLEX({
-                      ...numWRRB_FLEX,
-                      max: Number(e.target.value),
-                    })
-                  }
-                  disabled={numWRRB_FLEX.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># WR/TE Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numREC_FLEX.any}
-                  onChange={(e) =>
-                    setNumREC_FLEX({ ...numREC_FLEX, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numREC_FLEX.min}
-                  onChange={(e) =>
-                    setNumREC_FLEX({
-                      ...numREC_FLEX,
-                      min: Number(e.target.value),
-                    })
-                  }
-                  disabled={numREC_FLEX.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numREC_FLEX.max}
-                  onChange={(e) =>
-                    setNumREC_FLEX({
-                      ...numREC_FLEX,
-                      max: Number(e.target.value),
-                    })
-                  }
-                  disabled={numREC_FLEX.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># DEF Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numDEF.any}
-                  onChange={(e) =>
-                    setNumDEF({ ...numDEF, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numDEF.min}
-                  onChange={(e) =>
-                    setNumDEF({ ...numDEF, min: Number(e.target.value) })
-                  }
-                  disabled={numDEF.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numDEF.max}
-                  onChange={(e) =>
-                    setNumDEF({ ...numDEF, max: Number(e.target.value) })
-                  }
-                  disabled={numDEF.any}
-                />
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td># DL + LB + DB + IDP FLEX Slots</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={numIDP_TOTAL.any}
-                  onChange={(e) =>
-                    setNumIDP_TOTAL({ ...numIDP_TOTAL, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={numIDP_TOTAL.min}
-                  onChange={(e) =>
-                    setNumIDP_TOTAL({
-                      ...numIDP_TOTAL,
-                      min: Number(e.target.value),
-                    })
-                  }
-                  disabled={numIDP_TOTAL.any}
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={numIDP_TOTAL.max}
-                  onChange={(e) =>
-                    setNumIDP_TOTAL({
-                      ...numIDP_TOTAL,
-                      max: Number(e.target.value),
-                    })
-                  }
-                  disabled={numIDP_TOTAL.any}
-                />
-              </div>
-            </td>
-          </tr>
-        </tbody>
+        {isVisible === "Draft Settings" && (
+          <tbody>
+            <tr>
+              <td>Rounds</td>
+              <td>
+                <div className="flex column">
+                  <label>Any</label>
+                  <input
+                    type="checkbox"
+                    checked={numRounds.any}
+                    onChange={(e) =>
+                      setNumRounds({ ...numRounds, any: e.target.checked })
+                    }
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="flex column">
+                  <label>Min Rounds</label>
+                  <select
+                    value={numRounds.min}
+                    onChange={(e) =>
+                      setNumRounds({
+                        ...numRounds,
+                        min: Number(e.target.value),
+                      })
+                    }
+                    disabled={numRounds.any}
+                  >
+                    {Array.from({ length: 50 }, (_, i) => (
+                      <option key={i} value={i + 1}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div className="flex column">
+                  <label>Max Rounds</label>
+                  <select
+                    value={numRounds.max}
+                    onChange={(e) =>
+                      setNumRounds({
+                        ...numRounds,
+                        max: Number(e.target.value),
+                      })
+                    }
+                    disabled={numRounds.any}
+                  >
+                    {Array.from({ length: 50 }, (_, i) => (
+                      <option key={i} value={i + 1}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Teams</td>
+              <td>
+                <div className="flex column">
+                  <label>Any</label>
+                  <input
+                    type="checkbox"
+                    checked={numTeams.any}
+                    onChange={(e) =>
+                      setNumTeams({ ...numTeams, any: e.target.checked })
+                    }
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="flex column">
+                  <label>Min Teams</label>
+                  <select
+                    value={numTeams.min}
+                    onChange={(e) =>
+                      setNumTeams({
+                        ...numTeams,
+                        min: Number(e.target.value),
+                      })
+                    }
+                    disabled={numTeams.any}
+                  >
+                    {Array.from({ length: 32 }, (_, i) => (
+                      <option key={i} value={i + 1}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div className="flex column">
+                  <label>Max Teams</label>
+                  <select
+                    value={numTeams.max}
+                    onChange={(e) =>
+                      setNumTeams({
+                        ...numTeams,
+                        max: Number(e.target.value),
+                      })
+                    }
+                    disabled={numTeams.any}
+                  >
+                    {Array.from({ length: 32 }, (_, i) => (
+                      <option key={i} value={i + 1}>
+                        {i + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Draft Type</td>
+              <td>
+                <div className="flex">
+                  <div>
+                    <label>Snake</label>
+                    <input
+                      type="checkbox"
+                      checked={draftTypes.includes("snake")}
+                      onChange={(e) =>
+                        setDraftTypes(
+                          e.target.checked
+                            ? [
+                                ...draftTypes.filter((t) => t !== "auction"),
+                                "snake",
+                              ]
+                            : draftTypes.filter((t) => t !== "snake")
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="flex">
+                  <div>
+                    <label>Linear</label>
+                    <input
+                      type="checkbox"
+                      checked={draftTypes.includes("linear")}
+                      onChange={(e) =>
+                        setDraftTypes(
+                          e.target.checked
+                            ? [
+                                ...draftTypes.filter((t) => t !== "auction"),
+                                "linear",
+                              ]
+                            : draftTypes.filter((t) => t !== "linear")
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="flex">
+                  <div>
+                    <label>Auction</label>
+                    <input
+                      type="checkbox"
+                      checked={draftTypes.includes("auction")}
+                      onChange={(e) =>
+                        setDraftTypes(
+                          e.target.checked
+                            ? ["auction"]
+                            : draftTypes.filter((t) => t !== "auction")
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Player Type</td>
+              <td>
+                <div className="flex column">
+                  <label>Rookies Only</label>
+                  <input
+                    type="checkbox"
+                    checked={playerType === 1}
+                    onChange={(e) => setPlayerType(e.target.checked ? 1 : null)}
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="flex column">
+                  <label>Vets Only</label>
+                  <input
+                    type="checkbox"
+                    checked={playerType === 2}
+                    onChange={(e) => setPlayerType(e.target.checked ? 2 : null)}
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="flex column">
+                  <label>Vets & Rookies</label>
+                  <input
+                    type="checkbox"
+                    checked={playerType === 0}
+                    onChange={(e) => setPlayerType(e.target.checked ? 0 : null)}
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>League Type</td>
+              <td>
+                <div className="flex">
+                  <div>
+                    <label>Dynasty</label>
+                    <input
+                      type="checkbox"
+                      checked={leagueTypes.includes(2)}
+                      onChange={(e) =>
+                        setLeagueTypes(
+                          e.target.checked
+                            ? [...leagueTypes, 2]
+                            : leagueTypes.filter((t) => t !== 2)
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="flex">
+                  <div>
+                    <label>Keeper</label>
+                    <input
+                      type="checkbox"
+                      checked={leagueTypes.includes(1)}
+                      onChange={(e) =>
+                        setLeagueTypes(
+                          e.target.checked
+                            ? [...leagueTypes, 1]
+                            : leagueTypes.filter((t) => t !== 1)
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="flex">
+                  <div>
+                    <label>Redraft</label>
+                    <input
+                      type="checkbox"
+                      checked={leagueTypes.includes(0)}
+                      onChange={(e) =>
+                        setLeagueTypes(
+                          e.target.checked
+                            ? [...leagueTypes, 0]
+                            : leagueTypes.filter((t) => t !== 0)
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        )}
 
         <thead>
           <tr>
-            <th colSpan={4}>Scoring Settings</th>
+            <th
+              colSpan={4}
+              onClick={() =>
+                isVisible === "Player Slots"
+                  ? setIsVisible("")
+                  : setIsVisible("Player Slots")
+              }
+            >
+              Player Slots
+            </th>
           </tr>
         </thead>
-        <tbody>
+        {isVisible === "Player Slots" && (
+          <tbody>
+            {[
+              {
+                label: "# QB Slots",
+                state: numQB,
+                setState: setNumQB,
+              },
+              {
+                label: "# RB Slots",
+                state: numRB,
+                setState: setNumRB,
+              },
+              {
+                label: "# WR Slots",
+                state: numWR,
+                setState: setNumWR,
+              },
+              {
+                label: "# TE Slots",
+                state: numTE,
+                setState: setNumTE,
+              },
+              {
+                label: "# FLEX Slots",
+                state: numFLEX,
+                setState: setNumFLEX,
+              },
+              {
+                label: "# SF Slots",
+                state: numSUPER_FLEX,
+                setState: setNumSUPER_FLEX,
+              },
+              {
+                label: "# QB + SF Slots",
+                state: numQB_SF,
+                setState: setNumQB_SF,
+              },
+              {
+                label: "# K Slots",
+                state: numK,
+                setState: setNumK,
+              },
+              {
+                label: "# WR/RB Slots",
+                state: numWRRB_FLEX,
+                setState: setNumWRRB_FLEX,
+              },
+              {
+                label: "# REC/TE Slots",
+                state: numREC_FLEX,
+                setState: setNumREC_FLEX,
+              },
+              {
+                label: "# DEF Slots",
+                state: numDEF,
+                setState: setNumDEF,
+              },
+              {
+                label: "# DL + LB + DB + IDP FLEX",
+                state: numIDP_TOTAL,
+                setState: setNumIDP_TOTAL,
+              },
+            ].map((slot) => (
+              <tr key={slot.label}>
+                <td>{slot.label}</td>
+                <td>
+                  <div className="flex column">
+                    <label>Any</label>
+                    <input
+                      type="checkbox"
+                      checked={slot.state.any}
+                      onChange={(e) =>
+                        slot.setState({ ...slot.state, any: e.target.checked })
+                      }
+                    />
+                  </div>
+                </td>
+                <td>
+                  <div className="flex column">
+                    <label>Min</label>
+                    <input
+                      type="number"
+                      value={slot.state.min}
+                      onChange={(e) => {
+                        if (
+                          e.target.value === "" ||
+                          !isNaN(Number(e.target.value))
+                        ) {
+                          slot.setState({
+                            ...slot.state,
+                            min: e.target.value,
+                          });
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (e.target.value === "") {
+                          slot.setState({
+                            ...slot.state,
+                            min: "0",
+                          });
+                        }
+                      }}
+                      disabled={slot.state.any}
+                    />
+                  </div>
+                </td>
+                <td>
+                  <div className="flex column">
+                    <label>Max</label>
+                    <input
+                      type="number"
+                      value={slot.state.max}
+                      onChange={(e) => {
+                        if (
+                          e.target.value === "" ||
+                          !isNaN(Number(e.target.value))
+                        ) {
+                          slot.setState({
+                            ...slot.state,
+                            max: e.target.value,
+                          });
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (e.target.value === "") {
+                          slot.setState({
+                            ...slot.state,
+                            max: "0",
+                          });
+                        }
+                      }}
+                      disabled={slot.state.any}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        )}
+
+        <thead>
           <tr>
-            <td>Pass TD</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={pass_td.any}
-                  onChange={(e) =>
-                    setPass_td({ ...pass_td, any: e.target.checked })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={pass_td.min}
-                  onChange={(e) =>
-                    setPass_td({ ...pass_td, min: Number(e.target.value) })
-                  }
-                  disabled={pass_td.any}
-                  placeholder="0"
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={pass_td.max}
-                  onChange={(e) =>
-                    setPass_td({ ...pass_td, max: Number(e.target.value) })
-                  }
-                  disabled={pass_td.any}
-                />
-              </div>
-            </td>
+            <th
+              colSpan={4}
+              onClick={() =>
+                isVisible === "Scoring Settings"
+                  ? setIsVisible("")
+                  : setIsVisible("Scoring Settings")
+              }
+            >
+              Scoring Settings
+            </th>
           </tr>
-          <tr>
-            <td>Bonus Rec TE</td>
-            <td>
-              <div className="flex column">
-                <label>Any</label>
-                <input
-                  type="checkbox"
-                  checked={bonus_rec_te.any}
-                  onChange={(e) =>
-                    setBonus_rec_te({
-                      ...bonus_rec_te,
-                      any: e.target.checked,
-                    })
-                  }
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Min</label>
-                <input
-                  type="number"
-                  value={bonus_rec_te.min}
-                  onChange={(e) =>
-                    setBonus_rec_te({
-                      ...bonus_rec_te,
-                      min: Number(e.target.value),
-                    })
-                  }
-                  disabled={bonus_rec_te.any}
-                  placeholder="0"
-                />
-              </div>
-            </td>
-            <td>
-              <div className="flex column">
-                <label>Max</label>
-                <input
-                  type="number"
-                  value={bonus_rec_te.max}
-                  onChange={(e) =>
-                    setBonus_rec_te({
-                      ...bonus_rec_te,
-                      max: Number(e.target.value),
-                    })
-                  }
-                  disabled={bonus_rec_te.any}
-                />
-              </div>
-            </td>
-          </tr>
-        </tbody>
+        </thead>
+        {isVisible === "Scoring Settings" && (
+          <tbody>
+            {[
+              {
+                label: "Pass TD",
+                state: pass_td,
+                setState: setPass_td,
+              },
+              {
+                label: "Bonus Rec TE",
+                state: bonus_rec_te,
+                setState: setBonus_rec_te,
+              },
+            ].map((scoring) => (
+              <tr key={scoring.label}>
+                <td>{scoring.label}</td>
+                <td>
+                  <div className="flex column">
+                    <label>Any</label>
+                    <input
+                      type="checkbox"
+                      checked={scoring.state.any}
+                      onChange={(e) =>
+                        scoring.setState({
+                          ...scoring.state,
+                          any: e.target.checked,
+                        })
+                      }
+                    />
+                  </div>
+                </td>
+                <td>
+                  <div className="flex column">
+                    <label>Min</label>
+                    <input
+                      type="number"
+                      value={scoring.state.min}
+                      onChange={(e) => {
+                        if (
+                          e.target.value === "" ||
+                          !isNaN(Number(e.target.value))
+                        ) {
+                          scoring.setState({
+                            ...scoring.state,
+                            min: e.target.value,
+                          });
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (e.target.value === "") {
+                          scoring.setState({
+                            ...scoring.state,
+                            min: "0",
+                          });
+                        }
+                      }}
+                      disabled={scoring.state.any}
+                    />
+                  </div>
+                </td>
+                <td>
+                  <div className="flex column">
+                    <label>Max</label>
+                    <input
+                      type="number"
+                      value={scoring.state.max}
+                      onChange={(e) => {
+                        if (
+                          e.target.value === "" ||
+                          !isNaN(Number(e.target.value))
+                        ) {
+                          scoring.setState({
+                            ...scoring.state,
+                            max: e.target.value,
+                          });
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (e.target.value === "") {
+                          scoring.setState({
+                            ...scoring.state,
+                            max: "0",
+                          });
+                        }
+                      }}
+                      disabled={scoring.state.any}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
 
       <div className="flex">
