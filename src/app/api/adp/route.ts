@@ -76,6 +76,11 @@ export async function GET(req: Request) {
       keys: ["slots_super_flex"],
     },
     {
+      min: minQB_SF,
+      max: maxQB_SF,
+      keys: ["slots_qb", "slots_super_flex"],
+    },
+    {
       min: minK,
       max: maxK,
       keys: ["slots_k"],
