@@ -13,6 +13,7 @@ export async function GET(req: Request) {
   const minTeams = searchParams.get("minTeams");
   const maxTeams = searchParams.get("maxTeams");
   const draftTypes = searchParams.getAll("draftTypes[]");
+  const playerType = searchParams.get("playerType");
   const leagueTypes = searchParams.getAll("leagueTypes[]").map(Number);
   const numQB = searchParams.get("numQB");
   const numRB = searchParams.get("numRB");
@@ -36,6 +37,13 @@ export async function GET(req: Request) {
             AND (d.settings->>'teams')::INT <= $6
             AND d.type = ANY($7)
             AND l.settings->>'type' = ANY($8)
+            ${
+              playerType !== null && playerType !== undefined
+                ? `AND (
+                        COALESCE(d.settings->>'player_type', '-1')::INT
+                    ) = ${playerType}`
+                : ""
+            }
             ${
               numQB !== null && numQB !== undefined
                 ? `AND (

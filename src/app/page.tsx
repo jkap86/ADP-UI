@@ -32,6 +32,7 @@ export default function Home() {
   const [minTeams, setMinTeams] = useState(10);
   const [maxTeams, setMaxTeams] = useState(14);
   const [draftTypes, setDraftTypes] = useState(["snake", "linear"]);
+  const [playerType, setPlayerType] = useState<number | null>(null);
 
   const [leagueTypes, setLeagueTypes] = useState([2]);
 
@@ -99,6 +100,7 @@ export default function Home() {
         maxTeams,
         draftTypes,
         leagueTypes,
+        playerType,
         numQB,
         numRB,
         numWR,
@@ -160,7 +162,7 @@ export default function Home() {
           <tr>
             <td>Rounds</td>
             <td>
-              <div className="flex">
+              <div className="flex column">
                 <label>Min Rounds</label>
                 <select
                   value={minRounds}
@@ -175,7 +177,7 @@ export default function Home() {
               </div>
             </td>
             <td>
-              <div className="flex">
+              <div className="flex column">
                 <label>Max Rounds</label>
                 <select
                   value={maxRounds}
@@ -193,7 +195,7 @@ export default function Home() {
           <tr>
             <td>Teams</td>
             <td>
-              <div className="flex">
+              <div className="flex column">
                 <label>Min Teams</label>
                 <select
                   value={minTeams}
@@ -208,7 +210,7 @@ export default function Home() {
               </div>
             </td>
             <td>
-              <div className="flex">
+              <div className="flex column">
                 <label>Max Teams</label>
                 <select
                   value={maxTeams}
@@ -275,6 +277,26 @@ export default function Home() {
                     }
                   />
                 </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Player Type</td>
+            <td colSpan={2}>
+              <div className="flex">
+                <select
+                  value={playerType !== null ? playerType : ""}
+                  onChange={(e) =>
+                    setPlayerType(
+                      e.target.value === "" ? null : Number(e.target.value)
+                    )
+                  }
+                >
+                  <option value="">Any</option>
+                  <option value="0">Vets & Rookies</option>
+                  <option value="1">Rookies Only</option>
+                  <option value="2">Vets Only</option>
+                </select>
               </div>
             </td>
           </tr>
@@ -557,7 +579,7 @@ export default function Home() {
           </tr>
         </thead>
         <tbody>
-          {result.adp
+          {(result.adp || [])
             .filter((pick) => pick.undrafted_percentage < undrafted_percentage)
             .sort((a, b) => a.adp - b.adp)
             .map((pick) => (
@@ -566,10 +588,10 @@ export default function Home() {
                   {allplayers[pick.player_id]?.full_name || pick.player_id}
                 </td>
                 <td>
-                  {Math.floor(pick.adp / 12) + 1}.
-                  {(((Math.round(pick.adp) - 1) % 12) + 1)
-                    .toString()
-                    .padStart(2, "0")}
+                  {Math.ceil(Math.round(pick.adp) / 12)}.
+                  {(Math.round(pick.adp) % 12 || 12).toLocaleString("en-US", {
+                    minimumIntegerDigits: 2,
+                  })}
                 </td>
                 <td>{pick.undrafted_percentage}</td>
               </tr>
