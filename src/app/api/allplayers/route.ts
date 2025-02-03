@@ -38,7 +38,13 @@ export async function GET() {
       };
     });
 
-    fs.writeFileSync("allplayers.json", JSON.stringify(allplayers_updated));
+    fs.writeFileSync(
+      "./src/app/api/allplayers/allplayers.json",
+      JSON.stringify({
+        data: allplayers_updated,
+        updated_at: new Date().getTime(),
+      })
+    );
 
     return NextResponse.json(allplayers_updated);
   }

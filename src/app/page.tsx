@@ -20,7 +20,7 @@ export default function Home() {
   const [isVisible, setIsVisible] = useState("Date Range");
   const [startKey, setStartKey] = useState("last_picked");
   const [startDate, setStartDate] = useState(
-    new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30)
+    new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 14)
       .toISOString()
       .split("T")[0]
   );
@@ -44,6 +44,11 @@ export default function Home() {
 
   const [leagueTypes, setLeagueTypes] = useState([2]);
 
+  const [numQB_SF, setNumQB_SF] = useState<{
+    any: boolean;
+    min: string;
+    max: string;
+  }>({ any: false, min: "2", max: "2" });
   const [numQB, setNumQB] = useState<{
     any: boolean;
     min: string;
@@ -63,18 +68,13 @@ export default function Home() {
     any: boolean;
     min: string;
     max: string;
-  }>({ any: true, min: "2", max: "4" });
+  }>({ any: true, min: "1", max: "2" });
   const [numFLEX, setNumFLEX] = useState<{
     any: boolean;
     min: string;
     max: string;
   }>({ any: true, min: "0", max: "2" });
   const [numSUPER_FLEX, setNumSUPER_FLEX] = useState<{
-    any: boolean;
-    min: string;
-    max: string;
-  }>({ any: true, min: "0", max: "2" });
-  const [numQB_SF, setNumQB_SF] = useState<{
     any: boolean;
     min: string;
     max: string;
@@ -98,12 +98,12 @@ export default function Home() {
     any: boolean;
     min: string;
     max: string;
-  }>({ any: true, min: "0", max: "2" });
+  }>({ any: false, min: "0", max: "0" });
   const [numIDP_TOTAL, setNumIDP_TOTAL] = useState<{
     any: boolean;
     min: string;
     max: string;
-  }>({ any: true, min: "0", max: "10" });
+  }>({ any: false, min: "0", max: "0" });
 
   const [pass_td, setPass_td] = useState<{
     any: boolean;
@@ -130,7 +130,7 @@ export default function Home() {
     filters: {},
   });
 
-  const [undrafted_percentage, setUndrafted_percentage] = useState(10);
+  const [undrafted_percentage, setUndrafted_percentage] = useState(100);
 
   useEffect(() => {
     const fetchAllplayers = async () => {
@@ -567,6 +567,11 @@ export default function Home() {
           <tbody>
             {[
               {
+                label: "# QB + SF Slots",
+                state: numQB_SF,
+                setState: setNumQB_SF,
+              },
+              {
                 label: "# QB Slots",
                 state: numQB,
                 setState: setNumQB,
@@ -595,11 +600,6 @@ export default function Home() {
                 label: "# SF Slots",
                 state: numSUPER_FLEX,
                 setState: setNumSUPER_FLEX,
-              },
-              {
-                label: "# QB + SF Slots",
-                state: numQB_SF,
-                setState: setNumQB_SF,
               },
               {
                 label: "# K Slots",
@@ -837,7 +837,7 @@ export default function Home() {
             value={undrafted_percentage}
             onChange={(e) => setUndrafted_percentage(Number(e.target.value))}
           >
-            {[1, 5, 10, 20, 30, 40, 50].map((value) => (
+            {[1, 5, 10, 20, 30, 40, 50, 75, 90, 100].map((value) => (
               <option key={value} value={value}>
                 {value}%
               </option>
